@@ -301,7 +301,7 @@ body.holiday { background: #CBC3E8; }
       </g>
       </g>
     </svg>
-    <button class="goHoliday" id="goMain" type="button" style="left: 8.6%; top: 88%"><span class="ruby" id="goMainRuby"></span><span class="en" style="color:#2F7A4D">← Main Island</span></button>
+    <button class="goHoliday" id="goMain" type="button" style="left: 8.6%; top: 88%"><span class="ruby" id="goMainRuby"></span><span class="en" style="color:#2F7A4D">← Back to Main Island</span></button>
   </div>
 </div>
 
@@ -401,7 +401,7 @@ function showIsland(id, animate) {
   try { history.replaceState(null, '', id === 'main' ? location.pathname : '#holiday'); } catch (e) {}
 }
 document.getElementById('goHoliday').addEventListener('click', () => showIsland('holiday', true));
-document.getElementById('goMainRuby').innerHTML = rubyHTML('中文游戏岛', 'zhōng wén yóu xì dǎo');
+document.getElementById('goMainRuby').innerHTML = rubyHTML('回主岛', 'huí zhǔ dǎo');
 document.getElementById('goMain').addEventListener('click', () => showIsland('main', true));
 
 // list view: every topic and its games, for a quick pick in class
