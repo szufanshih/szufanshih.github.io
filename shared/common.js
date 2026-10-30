@@ -11,6 +11,24 @@
     const p = String(py || '').split(' ');
     return Array.from(zh).map((c, i) => `<span><span class="py">${p[i] || ''}</span><span class="zh">${c}</span></span>`).join('');
   };
+  // a whole sentence with pinyin over each character; punctuation gets no pinyin
+  S.rubyText = function (zh, py) {
+    const syl = String(py || '').replace(/[.,?!;:，。？！、\/／]/g, ' ').trim().split(/\s+/).filter(Boolean);
+    let k = 0;
+    return Array.from(zh).map(c => {
+      const han = /[\u3400-\u9fff]/.test(c);
+      const p = han ? (syl[k++] || '') : '';
+      return `<span><span class="py">${p || '&nbsp;'}</span><span class="zh">${c}</span></span>`;
+    }).join('');
+  };
+  // fill a sentence pattern like { zh: '我看到{x}。', py: 'wǒ kàn dào {x}.' } with a word
+  S.fill = (tpl, w) => ({ zh: tpl.zh.replace('{x}', w ? w.zh : '＿＿'), py: tpl.py.replace('{x}', w ? w.py : ''), en: (tpl.en || '').replace('{x}', w ? S.withArticle(w) : '___') });
+  S.withArticle = w => {
+    if (w.a) return w.a;
+    const e = w.en || '';
+    if (/s$/.test(e) || /^(candy)$/i.test(e)) return e;
+    return (/^[aeiou]/i.test(e) ? 'an ' : 'a ') + e;
+  };
   S.esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
   // ---- 记住设定（声音、计时器、难度）。读不到也没关系 ----
@@ -24,7 +42,30 @@
     a.href = '../';
     a.innerHTML = `<span aria-hidden="true">🏝</span><span class="ruby">${S.ruby('史老师的中文游戏岛', 'shǐ lǎo shī de zhōng wén yóu xì dǎo')}</span>` +
       `<span class="en">Ms. Shih's Island of Chinese Games</span><span class="back">← Back to the island</span>`;
-    document.body.insertBefore(a, document.body.firstChild);
+    const bar = document.createElement('div');
+    bar.className = 'islandBarWrap';
+    bar.appendChild(a);
+    document.body.insertBefore(bar, document.body.firstChild);
+    // find which place on the island this game belongs to, and add a "back to that place" button
+    const s = document.createElement('script');
+    s.src = '../island.js';
+    s.onload = () => {
+      const here = location.pathname.split('/').pop() + '?unit=' + S.unitId();
+      let place = null;
+      Object.values(window.ISLANDS || {}).forEach(I => I.places.forEach(P => {
+        (P.games || []).forEach(g => { if (P.id && g.href.split('/').pop() === here) place = P; });
+      }));
+      if (!place) return;
+      const b = document.createElement('a');
+      b.className = 'placeBtn';
+      b.href = '../#' + place.id;
+      b.innerHTML = `<span aria-hidden="true">←</span><span class="ruby">${S.ruby(place.zh, place.py)}</span><span class="en">${S.esc(place.en)}</span>`;
+      b.setAttribute('aria-label', 'Back to ' + place.en);
+      // goes at the end of the game's buttons (right of Start over)
+      const controls = document.querySelector('.controls');
+      (controls || bar).appendChild(b);
+    };
+    document.head.appendChild(s);
   };
 
   // ---- 读取单元：网址 ?unit=family 就读 units/family/words.js ----
@@ -104,14 +145,23 @@
     for (let k = 0; k < n; k++) g += `<circle cx="15" cy="${30 - k * 8.5}" r="8.5" fill="${SCOOPS[k % SCOOPS.length]}" stroke="#2B2B2B" stroke-width="1.5"/>`;
     return `<svg viewBox="0 ${-6 - Math.max(0, n - 4) * 8.5} 30 ${62 + Math.max(0, n - 4) * 8.5}" aria-hidden="true">${g}</svg>`;
   };
+  // 几只鬼（鬼屋的难度）
+  S.ghosts = function (n) {
+    const one = (x, y) => `<g transform="translate(${x} ${y})"><path d="M0 22 L0 9 C0 -3 18 -3 18 9 L18 22 L14 19 L9 23 L4 19 Z" fill="#FFFFFF" stroke="#2B2B2B" stroke-width="1.8" stroke-linejoin="round"/>` +
+      `<circle cx="6" cy="9" r="1.6" fill="#2B2B2B"/><circle cx="12" cy="9" r="1.6" fill="#2B2B2B"/><ellipse cx="9" cy="14" rx="1.8" ry="2.2" fill="#2B2B2B"/></g>`;
+    let g = '';
+    for (let k = 0; k < n; k++) g += one(k * 14, k % 2 ? 6 : 0);
+    return `<svg viewBox="-2 -2 ${18 + (n - 1) * 14 + 4} 32" aria-hidden="true" style="width:${22 + (n - 1) * 17}px;height:40px">${g}</svg>`;
+  };
   // levels: [{ note }, ...]   countOf(level) -> how many items at that level
-  S.levelButtons = function (box, levels, current, countOf, onPick) {
+  // icon: 'icecream' (default) or 'ghost'
+  S.levelButtons = function (box, levels, current, countOf, onPick, icon) {
     box.innerHTML = '';
     const btns = levels.map((L, k) => {
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'level'; b.dataset.level = k + 1;
       const n = countOf ? countOf(k + 1) : null;
-      b.innerHTML = S.iceCream(k + 1) + `<span class="lv-text">Level ${k + 1}<small>${S.esc(L.note || '')}${n ? ' · ' + n : ''}</small></span>`;
+      b.innerHTML = (icon === 'ghost' ? S.ghosts(k + 1) : S.iceCream(k + 1)) + `<span class="lv-text">Level ${k + 1}<small>${S.esc(L.note || '')}${n ? ' · ' + n : ''}</small></span>`;
       b.addEventListener('click', () => onPick(k + 1));
       box.appendChild(b);
       return b;
@@ -124,6 +174,76 @@
     if (h >= 1 && h <= max) return h;
     const saved = +S.get(key, 1);
     return saved >= 1 && saved <= max ? saved : 1;
+  };
+
+  // ---- 读取单元的图（units/<单元>/art.js），没有也没关系 ----
+  S.loadArt = function () {
+    return new Promise(resolve => {
+      const s = document.createElement('script');
+      s.src = `../units/${S.unitId()}/art.js`;
+      s.onload = () => resolve(window.ART || null);
+      s.onerror = () => resolve(null);
+      document.head.appendChild(s);
+    });
+  };
+
+  // ---- 拖拉：卡片拖到格子里；也可以「点卡片，再点格子」 ----
+  // opts: { slots: () => [slot elements], accept(card, slot) -> true/false, onTapCard(card) (optional) }
+  S.dragCards = function (cards, opts) {
+    let drag = null, picked = null;
+    const slotAt = (x, y) => {
+      const el = document.elementFromPoint(x, y);
+      const s = el && el.closest('.dropSlot');
+      return s && opts.slots().includes(s) ? s : null;
+    };
+    const tryDrop = (card, slot) => {
+      if (!slot) return;
+      if (!opts.accept(card, slot)) { card.classList.add('shake'); setTimeout(() => card.classList.remove('shake'), 400); }
+    };
+    function down(e) {
+      const card = e.currentTarget;
+      if (card.classList.contains('used') || drag) return;
+      e.preventDefault();
+      const r = card.getBoundingClientRect();
+      drag = { card, x0: e.clientX, y0: e.clientY, dx: e.clientX - r.left, dy: e.clientY - r.top, id: e.pointerId, moved: false, over: null, w: r.width };
+      addEventListener('pointermove', move); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+    }
+    function move(e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      if (!drag.moved && Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 6) return;
+      if (!drag.moved) {
+        drag.moved = true;
+        drag.ph = document.createElement('div');
+        drag.ph.className = 'cardPh';
+        drag.ph.style.width = drag.w + 'px'; drag.ph.style.height = drag.card.offsetHeight + 'px';
+        drag.card.after(drag.ph);
+        drag.card.classList.add('dragging'); drag.card.style.width = drag.w + 'px';
+      }
+      drag.card.style.left = (e.clientX - drag.dx) + 'px'; drag.card.style.top = (e.clientY - drag.dy) + 'px';
+      const s = slotAt(e.clientX, e.clientY);
+      if (s !== drag.over) { if (drag.over) drag.over.classList.remove('hover'); if (s) s.classList.add('hover'); drag.over = s; }
+    }
+    function up(e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+      const d = drag; drag = null;
+      if (d.over) d.over.classList.remove('hover');
+      if (d.moved) {
+        d.card.classList.remove('dragging'); d.card.style.left = d.card.style.top = d.card.style.width = '';
+        d.ph.remove();
+        tryDrop(d.card, slotAt(e.clientX, e.clientY));
+      } else if (opts.onTapCard) {
+        opts.onTapCard(d.card);
+      } else {                                   // tap: pick this card, then tap a slot
+        if (picked) picked.classList.remove('picked');
+        picked = picked === d.card ? null : d.card;
+        if (picked) picked.classList.add('picked');
+      }
+    }
+    cards.forEach(c => c.addEventListener('pointerdown', down));
+    return {
+      tapSlot(slot) { if (picked) { const c = picked; picked.classList.remove('picked'); picked = null; tryDrop(c, slot); } }
+    };
   };
 
   // ---- 开始画面：游戏区先模糊，按 Start 才开始 ----

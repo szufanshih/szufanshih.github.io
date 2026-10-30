@@ -11,6 +11,7 @@
      （两座岛的地图都是宽 1240、高 620）。
    - 点牌子会跳出这个地点的游戏选单（games）。
      还没有游戏的地点，牌子是虚线、写 Coming soon，点了不会有反应。
+   - id：有游戏的地点要有一个英文 id（小写、用 - 连接），游戏里的「回到地点」按钮会用到。
    - labelOnly: true 的地点只是岛上的名牌（例如卫生间、饮水机），不会有游戏。
    - color：'me' 绿、'dad' 橘、'mom' 粉红、'sea' 蓝、'sun' 黄、'night' 紫
    ===================================================================== */
@@ -18,7 +19,7 @@ window.ISLANDS = {
   main: {
     zh: '史老师的中文游戏岛', py: 'shǐ lǎo shī de zhōng wén yóu xì dǎo', en: "Ms. Shih's Island of Chinese Games", width: 1240,
     places: [
-      { zh: '家', py: 'jiā', en: 'Family', x: 765, y: 92, color: 'dad',
+      { id: 'family', zh: '家', py: 'jiā', en: 'Family', x: 765, y: 92, color: 'dad',
         games: [
           { zh: '家族树', py: 'jiā zú shù', en: 'Family Tree', note: 'Drag the words onto the tree, 4 levels', href: 'games/tree.html?unit=family' },
           { zh: '家人配对', py: 'jiā rén pèi duì', en: 'Family Matching', note: 'Match Chinese and English, 4 levels', href: 'games/match.html?unit=family' },
@@ -34,7 +35,13 @@ window.ISLANDS = {
   holiday: {
     zh: '节日岛', py: 'jié rì dǎo', en: 'Holiday Island', width: 1240,
     places: [
-      { zh: '鬼屋', py: 'guǐ wū', en: 'Haunted House', x: 540, y: 110, color: 'night', games: [] },
+      { id: 'haunted-house', zh: '鬼屋', py: 'guǐ wū', en: 'Haunted House', x: 540, y: 110, color: 'night',
+        games: [
+          { zh: '鬼屋窗户', py: 'guǐ wū chuāng hu', en: 'Haunted House Windows', note: '鬼屋里有什么？ Open a window and answer', href: 'games/windows.html?unit=halloween' },
+          { zh: '我看到', py: 'wǒ kàn dào', en: 'I See', note: '你看到什么？ Drag the word into the sentence', href: 'games/spy.html?unit=halloween' },
+          { zh: '化妆舞会', py: 'huà zhuāng wǔ huì', en: 'Costume Party', note: '我要当＿＿ Drag each name to the costume', href: 'games/dressup.html?unit=halloween' },
+          { zh: '我怕／我不怕', py: 'wǒ pà / wǒ bú pà', en: "I'm afraid / I'm not afraid", note: 'Build the sentence', href: 'games/afraid.html?unit=halloween' }
+        ] },
       { zh: '感恩节市场', py: 'gǎn ēn jié shì chǎng', en: 'Thanksgiving Market', x: 950, y: 170, color: 'dad', games: [] }
     ]
   }

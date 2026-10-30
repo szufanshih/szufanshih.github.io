@@ -36,9 +36,9 @@
 
   <link rel="stylesheet" href="../shared/common.css">
   <style>
-    .islandBar { align-self: stretch; margin: -8px -8px 10px; }
-    @media (min-width: 640px) { .islandBar { margin: -16px -16px 10px; } }
-    @media print { .islandBar { display: none !important; } }
+    .islandBarWrap { align-self: stretch; margin: -8px -8px 10px; }
+    @media (min-width: 640px) { .islandBarWrap { margin: -16px -16px 10px; } }
+    @media print { .islandBarWrap { display: none !important; } }
     :root {
       /* Dynamic customizable font sizes with defaults */
       --tile-py-size: 14px;
@@ -169,7 +169,7 @@
     </div>
 
     <!-- Control Buttons: [1P 2P 3P 4P 5P] -> [Reset] -> [Sound] -> [Script] -> [Print] -> divider -> [字體大小] -->
-    <div class="flex items-center gap-1 sm:gap-2 flex-wrap">
+    <div class="controls flex items-center gap-1 sm:gap-2 flex-wrap">
       
       <!-- Player Count Buttons: [ 1P | 2P | 3P | 4P | 5P ] -->
       <div class="flex items-center bg-slate-100 p-0.5 sm:p-1 rounded-xl text-xs font-bold text-slate-600 border border-slate-200">

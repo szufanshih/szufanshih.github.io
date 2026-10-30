@@ -327,8 +327,12 @@ const COLORS = {
 };
 
 function rubyHTML(zh, py) {
-  const p = py.split(' ');
-  return Array.from(zh).map((c, i) => `<span><span class="py">${p[i] || ''}</span><span class="zh">${c}</span></span>`).join('');
+  const syl = String(py || '').replace(/[.,?!;:，。？！、\/／]/g, ' ').trim().split(/\s+/).filter(Boolean);
+  let k = 0;
+  return Array.from(zh).map(c => {
+    const p = /[\u3400-\u9fff]/.test(c) ? (syl[k++] || '') : '';
+    return `<span><span class="py">${p || '&nbsp;'}</span><span class="zh">${c}</span></span>`;
+  }).join('');
 }
 
 const overlay = document.getElementById('overlay');
@@ -419,7 +423,17 @@ listBtn.addEventListener('click', () => {
   showIsland(current, false);
 });
 
-showIsland(location.hash === '#holiday' ? 'holiday' : 'main', false);
+// #holiday opens the holiday island; #<place id> (e.g. #haunted-house) opens that place's game menu
+(function () {
+  const h = decodeURIComponent((location.hash || '').slice(1));
+  let start = h === 'holiday' ? 'holiday' : 'main', place = null;
+  Object.entries(ISLANDS).forEach(([k, I]) => I.places.forEach(P => { if (P.id && P.id === h) { start = k; place = P; } }));
+  showIsland(start, false);
+  if (place && place.games && place.games.length) {
+    const btn = [...document.querySelectorAll('#scene-' + start + ' .spot')].find(b => (b.getAttribute('aria-label') || '').startsWith(place.zh + ' '));
+    openTopic(place, btn || null);
+  }
+})();
 </script>
 </body>
 </html>
