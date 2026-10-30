@@ -15,6 +15,20 @@
   // 开头的 2 在百、千、万前面念「两」；「一」在百、千前念 yì，在万前念 yí
   N.parts = function (n) {
     if (n === 0) return [['零', 'líng']];
+    // 一万以上（自由拨会用到）：先念几万，再念后面的四位
+    if (n >= 10000) {
+      const hi = Math.floor(n / 10000), lo = n % 10000;
+      const out = hi === 2 ? [['两', 'liǎng']] : N.parts(hi);
+      const last = out[out.length - 1];
+      if (last[0] === '一') last[1] = 'yí';          // 一万、二十一万：一念 yí
+      out.push(['万', 'wàn']);
+      if (lo) {
+        if (lo < 1000) out.push(['零', 'líng']);
+        if (lo >= 10 && lo < 20) out.push(['一', 'yī']);   // 一万零一十五
+        out.push(...N.parts(lo));
+      }
+      return out;
+    }
     const s = String(n), L = s.length, out = [];
     let zero = false;
     for (let i = 0; i < L; i++) {
@@ -92,7 +106,8 @@
     const H = frameH + 74;
     const cx = c => F + 7 + CW / 2 + c * CW;
     const m = new Array(cols).fill(0), k = new Array(cols).fill(0);
-    const PLACE = [['个', 'gè', '1'], ['十', 'shí', '10'], ['百', 'bǎi', '100'], ['千', 'qiān', '1000'], ['万', 'wàn', '10000']];
+    const PLACE = [['个', 'gè', '1'], ['十', 'shí', '10'], ['百', 'bǎi', '100'], ['千', 'qiān', '1000'], ['万', 'wàn', '10000'],
+                   ['十万', 'shí wàn', '100000'], ['百万', 'bǎi wàn', '1000000']];
     const bead = 'M-33 0 Q-24 -15 0 -15 Q24 -15 33 0 Q24 15 0 15 Q-24 15 -33 0 Z';
     let g = `<rect x="2" y="2" width="${W - 4}" height="${frameH - 4}" rx="14" fill="#8A5A2B" stroke="#2B2B2B" stroke-width="4"/>` +
             `<rect x="${F}" y="${F}" width="${W - 2 * F}" height="${frameH - 2 * F}" rx="6" fill="#FFF8E7" stroke="#5C3A1A" stroke-width="2"/>`;

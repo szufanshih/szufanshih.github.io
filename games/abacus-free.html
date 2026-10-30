@@ -17,7 +17,7 @@ body.game { background: #FFF8E1; }
 .readout .num { font: 700 64px/1.1 var(--f-latin); }
 .readout .ruby .py { font-size: 19px; } .readout .ruby .zh { font-size: 44px; }
 .readout .hiddenNote { font-size: 20px; color: var(--muted); align-self: center; }
-.abBox { width: 100%; max-width: 720px; }
+.abBox { width: 100%; max-width: 860px; }
 .btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 .big { display: flex; flex-direction: column; align-items: center; cursor: pointer; font: 700 17px var(--f-latin); color: var(--ink);
   border: 3px solid var(--ink); border-radius: 16px; padding: 6px 26px 8px; background: var(--card); box-shadow: 0 4px 0 var(--ink); }
@@ -57,12 +57,12 @@ Shih.loadUnit().then(UNIT => {
   Shih.soundButton(document.getElementById('soundBtn'));
   const readout = document.getElementById('readout');
   let showNum = Shih.get('abacusShow', true);
-  const ab = N.abacus(document.getElementById('abBox'), { cols: 5, interactive: true, onChange: paint });
+  const ab = N.abacus(document.getElementById('abBox'), { cols: 7, interactive: true, onChange: paint });
   // 一档可以拨到 15（两颗上珠 + 五颗下珠），显示的是整个算盘的总数
   function paint() {
     const n = ab.get();
     if (!showNum) { readout.innerHTML = '<span class="hiddenNote">？ The number is hidden.</span>'; return; }
-    readout.innerHTML = `<span class="num">${n}</span>` + (n <= 99999 ? N.ruby(n) : '');
+    readout.innerHTML = `<span class="num">${n}</span>` + (n <= 9999999 ? N.ruby(n) : "");
   }
   const showBtn = document.getElementById('showBtn');
   function paintShow() {

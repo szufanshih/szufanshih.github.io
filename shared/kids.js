@@ -33,7 +33,7 @@
   const FEELS = [
     { zh: '我很好',     py: 'wǒ hěn hǎo',     en: "I'm fine",     feel: 'good',    level: 1 },
     { zh: '我不好',     py: 'wǒ bù hǎo',      en: "I'm not good", feel: 'notgood', level: 1 },
-    { zh: '我马马虎虎', py: 'wǒ mǎ ma hū hū', en: "I'm so-so",    feel: 'soso',    level: 1 },
+    { zh: '我马马虎虎', py: 'wǒ mǎ ma hū hu', en: "I'm so-so",    feel: 'soso',    level: 1 },
     { zh: '我很饿',     py: 'wǒ hěn è',       en: "I'm hungry",   feel: 'hungry',  level: 2 },
     { zh: '我很棒',     py: 'wǒ hěn bàng',    en: "I'm great",    feel: 'great',   level: 2 },
     { zh: '我很累',     py: 'wǒ hěn lèi',     en: "I'm tired",    feel: 'tired',   level: 2 },

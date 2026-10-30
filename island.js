@@ -33,7 +33,7 @@ window.ISLANDS = {
         ] },
       { zh: '卫生间', py: 'wèi shēng jiān', en: 'Restroom', x: 470, y: 140, labelOnly: true },
       { zh: '饮水机', py: 'yǐn shuǐ jī', en: 'Water Fountain', x: 414, y: 384, labelOnly: true },
-      { id: 'hello', zh: '你好吗', py: 'nǐ hǎo ma', en: 'How are you?', x: 193, y: 548, color: 'sea',
+      { id: 'hello', zh: '你好', py: 'nǐ hǎo', en: 'Hello', x: 193, y: 548, color: 'sea',
         games: [
           { zh: '认字配对', py: 'rèn zì pèi duì', en: 'Pinyin Match', note: 'Greetings and feelings, 3 levels', href: 'games/match.html?unit=hello' },
           { zh: '你好吗？', py: 'nǐ hǎo ma?', en: 'How Are You?', note: 'Look at the kid and answer, 3 levels', href: 'games/feel.html?unit=hello' }

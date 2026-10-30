@@ -35,7 +35,7 @@ UNIT.words = [
   { zh: '我很好',         py: 'wǒ hěn hǎo',                 en: "I'm fine",               side: 'sea', level: 1, feel: 'good' },   // 二年级配整句
   { zh: '谢谢你',         py: 'xiè xie nǐ',                 en: 'Thank you',              side: 'sea', level: 1 },
   { zh: '我不好',         py: 'wǒ bù hǎo',                  en: "I'm not good",           side: 'sea', level: 1, feel: 'notgood' },
-  { zh: '我马马虎虎',     py: 'wǒ mǎ ma hū hū',             en: "I'm so-so",              side: 'sea', level: 1, feel: 'soso' },
+  { zh: '我马马虎虎',     py: 'wǒ mǎ ma hū hu',             en: "I'm so-so",              side: 'sea', level: 1, feel: 'soso' },
   // ---- 三年级 ----
   { zh: '早上好',         py: 'zǎo shàng hǎo',              en: 'Good morning',           side: 'sea', level: 2 },
   { zh: '下午好',         py: 'xià wǔ hǎo',                 en: 'Good afternoon',         side: 'sea', level: 2 },

@@ -106,7 +106,7 @@ Shih.loadUnit().then(UNIT => {
       { pre: ['我的家有', 'wǒ de jiā yǒu'], ans: numCard(fam), post: ['个人。', 'gè rén'], en: 'There are {x} people in my family.', x: fam },
       { pre: ['我有', 'wǒ yǒu'], ans: HAIR[p.long], post: ['发。', 'fà'], en: 'I have {x} hair.', x: p.long ? 'long' : 'short' },
       { pre: ['我很', 'wǒ hěn'], ans: adjCard(adj), post: ['。', ''], en: "I'm {x}.", x: adj.en },
-      { pre: ['我的好朋友叫', 'wǒ de hǎo péng you jiào'], ans: nameCard(friend.first), post: ['。', ''], en: 'My best friend is {x}.', x: friend.first }
+      { pre: ['我的好朋友叫', 'wǒ de hǎo péng yǒu jiào'], ans: nameCard(friend.first), post: ['。', ''], en: 'My best friend is {x}.', x: friend.first }
     ];
     // 容易搞混的卡：别人的姓、别人的名字、差一的数字、相反的头发
     const extra = [adjCard(adjWrong), nameCard(other.last), nameCard(other.first), HAIR[!p.long],

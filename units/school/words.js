@@ -28,10 +28,10 @@ UNIT.levels = [
 UNIT.words = [
   // ---- 二年级 ----
   { zh: '老师',     py: 'lǎo shī',       en: 'teacher',          side: 'mom', level: 1 },
-  { zh: '小朋友',   py: 'xiǎo péng you', en: 'kids, children',   side: 'mom', level: 1 },
+  { zh: '小朋友',   py: 'xiǎo péng yǒu', en: 'kids, children',   side: 'mom', level: 1 },
   { zh: '你叫',     py: 'nǐ jiào',       en: 'you are called',   side: 'mom', level: 1 },
   { zh: '什么',     py: 'shén me',       en: 'what',             side: 'mom', level: 1 },
-  { zh: '名字',     py: 'míng zi',       en: 'name',             side: 'mom', level: 1 },
+  { zh: '名字',     py: 'míng zì',       en: 'name',             side: 'mom', level: 1 },
   { zh: '我叫',     py: 'wǒ jiào',       en: 'my name is',       side: 'mom', level: 1 },
   // ---- 三年级 ----
   { zh: '学习',     py: 'xué xí',        en: 'learn, study',     side: 'mom', level: 2 },
@@ -44,7 +44,7 @@ UNIT.words = [
   // ---- 四年级 ----
   { zh: '你几岁？', py: 'nǐ jǐ suì?',    en: 'How old are you?', side: 'mom', level: 3 },
   { zh: '我姓',     py: 'wǒ xìng',       en: 'my last name is',  side: 'mom', level: 3 },
-  { zh: '好朋友',   py: 'hǎo péng you',  en: 'best friend',      side: 'mom', level: 3 },
+  { zh: '好朋友',   py: 'hǎo péng yǒu',  en: 'best friend',      side: 'mom', level: 3 },
   { zh: '家',       py: 'jiā',           en: 'family, home',     side: 'mom', level: 3 },
   { zh: '长发',     py: 'cháng fà',      en: 'long hair',        side: 'mom', level: 3 },
   { zh: '短发',     py: 'duǎn fà',       en: 'short hair',       side: 'mom', level: 3 },

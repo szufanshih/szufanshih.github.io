@@ -103,7 +103,7 @@ Shih.loadUnit().then(UNIT => {
     const lines = [], extra = [];
     // 第 1 级（二年级）：A 说「你好！」，B 回「你好！」；再问名字
     if (level === 1) {
-      const hi = T('你好！', 'nǐ hǎo!', 'Hello!'), ask = T('你叫什么名字？', 'nǐ jiào shén me míng zi?', "What's your name?");
+      const hi = T('你好！', 'nǐ hǎo!', 'Hello!'), ask = T('你叫什么名字？', 'nǐ jiào shén me míng zì?', "What's your name?");
       lines.push({ who: 'A', t: hi }, { who: 'B', t: hi, blank: true });
       lines.push({ who: 'A', t: ask }, { who: 'B', t: nameLine(B), blank: true });
       // 错的卡：别人的名字、把问题当回答
@@ -115,7 +115,7 @@ Shih.loadUnit().then(UNIT => {
     const g2 = ART.GREET[morning ? 'afternoon' : 'morning'];
     extra.push(T(g2.zh + '！', g2.py + '!', ''));
     const qa = [
-      [T('你叫什么名字？', 'nǐ jiào shén me míng zi?', "What's your name?"), nameLine(B), nameLine(A)],
+      [T('你叫什么名字？', 'nǐ jiào shén me míng zì?', "What's your name?"), nameLine(B), nameLine(A)],
       [T('你好吗？', 'nǐ hǎo ma?', 'How are you?'), feelLine(feel), feelLine(pick(feels.filter(w => w !== feel)))]
     ];
     if (level >= 3) qa.push([T('你几岁？', 'nǐ jǐ suì?', 'How old are you?'), ageLine(age), ageLine(age === 10 ? 9 : age + 1)]);
