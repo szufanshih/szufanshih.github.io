@@ -23,9 +23,9 @@ UNIT.matchTitle = { zh: '认字配对', py: 'rèn zì pèi duì', en: 'Pinyin Ma
 UNIT.matchMax = 12;            // 每次最多配几组；字比较多的时候，每次随机挑
 
 UNIT.levels = [
-  { note: '二年级 Grade 2' },
-  { note: '三年级 Grade 3' },
-  { note: '四年级 Grade 4' }
+  { note: '' },
+  { note: '' },
+  { note: '' }
 ];
 
 UNIT.words = [

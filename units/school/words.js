@@ -20,9 +20,9 @@ UNIT.matchTitle = { zh: '认字配对', py: 'rèn zì pèi duì', en: 'Pinyin Ma
 UNIT.matchMax = 12;            // 每次最多配几组；字比较多的时候，每次随机挑
 
 UNIT.levels = [
-  { note: '二年级 Grade 2' },
-  { note: '三年级 Grade 3' },
-  { note: '四年级 Grade 4' }
+  { note: '' },
+  { note: '' },
+  { note: '' }
 ];
 
 UNIT.words = [
@@ -60,8 +60,8 @@ UNIT.words = [
   { zh: '活跃',     py: 'huó yuè',       en: 'active',           side: 'mom', level: 3, adj: true, icon: '🏃' }
 ];
 
-/* 对话框（从第 2 级开始）：一回合几段对话 */
-UNIT.chat = { title: { zh: '对话框', py: 'duì huà kuàng', en: 'Chat Bubbles' }, from: 2, rounds: 3 };
+/* 对话框：一回合几段对话。from = 从第几级开始（1 = 二年级就有） */
+UNIT.chat = { title: { zh: '对话框', py: 'duì huà kuàng', en: 'Chat Bubbles' }, from: 1, rounds: 3 };
 
 /* 自我介绍（四年级的 project） */
 UNIT.intro = { title: { zh: '自我介绍', py: 'zì wǒ jiè shào', en: 'About Me' } };

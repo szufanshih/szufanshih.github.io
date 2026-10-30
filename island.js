@@ -28,8 +28,8 @@ window.ISLANDS = {
       { id: 'school', zh: '学校', py: 'xué xiào', en: 'School', x: 265, y: 296, color: 'mom',
         games: [
           { zh: '认字配对', py: 'rèn zì pèi duì', en: 'Pinyin Match', note: 'School words, 3 levels', href: 'games/match.html?unit=school' },
-          { zh: '对话框', py: 'duì huà kuàng', en: 'Chat Bubbles', note: 'Fill in the chat, Grade 3–4', href: 'games/chat.html?unit=school' },
-          { zh: '自我介绍', py: 'zì wǒ jiè shào', en: 'About Me', note: 'Grade 4 project · Read the card, build the sentences', href: 'games/intro.html?unit=school' }
+          { zh: '对话框', py: 'duì huà kuàng', en: 'Chat Bubbles', note: 'Fill in the chat, 3 levels', href: 'games/chat.html?unit=school' },
+          { zh: '自我介绍', py: 'zì wǒ jiè shào', en: 'About Me', note: 'Read the card, build the sentences', href: 'games/intro.html?unit=school' }
         ] },
       { zh: '卫生间', py: 'wèi shēng jiān', en: 'Restroom', x: 470, y: 140, labelOnly: true },
       { zh: '饮水机', py: 'yǐn shuǐ jī', en: 'Water Fountain', x: 414, y: 384, labelOnly: true },

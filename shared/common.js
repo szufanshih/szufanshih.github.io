@@ -177,7 +177,7 @@
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'level'; b.dataset.level = k + 1;
       const n = countOf ? countOf(k + 1) : null;
-      b.innerHTML = (icon === 'ghost' ? S.ghosts(k + 1) : icon === 'money' ? S.moneyBags(k + 1) : icon === 'wave' ? S.waves(k + 1) : icon === 'bag' ? S.bags(k + 1) : S.iceCream(k + 1)) + `<span class="lv-text">Level ${k + 1}<small>${S.esc(L.note || '')}${n ? ' · ' + n : ''}</small></span>`;
+      b.innerHTML = (icon === 'ghost' ? S.ghosts(k + 1) : icon === 'money' ? S.moneyBags(k + 1) : icon === 'wave' ? S.waves(k + 1) : icon === 'bag' ? S.bags(k + 1) : S.iceCream(k + 1)) + `<span class="lv-text">Level ${k + 1}<small>${S.esc([L.note, n ? n + ' words' : ''].filter(Boolean).join(' · '))}</small></span>`;
       b.addEventListener('click', () => onPick(k + 1));
       box.appendChild(b);
       return b;

@@ -101,6 +101,14 @@ Shih.loadUnit().then(UNIT => {
     const feel = pick(feels), age = pick([7, 8, 9, 10]);
     const g = ART.GREET[morning ? 'morning' : 'afternoon'];
     const lines = [], extra = [];
+    // 第 1 级（二年级）：A 说「你好！」，B 回「你好！」；再问名字
+    if (level === 1) {
+      const hi = T('你好！', 'nǐ hǎo!', 'Hello!'), ask = T('你叫什么名字？', 'nǐ jiào shén me míng zi?', "What's your name?");
+      lines.push({ who: 'A', t: hi }, { who: 'B', t: hi, blank: true });
+      lines.push({ who: 'A', t: ask }, { who: 'B', t: nameLine(B), blank: true });
+      // 错的卡：别人的名字、把问题当回答
+      return { A, B, morning: null, lines, extra: [nameLine(A), ask] };
+    }
     // 打招呼：A 先说（空着），B 回一样的话
     lines.push({ who: 'A', t: T(g.zh + '！', g.py + '!', g.en + '!'), blank: true });
     lines.push({ who: 'B', t: T(g.zh + '！', g.py + '!', g.en + '!'), echo: true });
@@ -125,7 +133,7 @@ Shih.loadUnit().then(UNIT => {
   function show() {
     const c = chats[ci];
     busy = false;
-    chat.innerHTML = `<div class="top"><span class="qnum">${ci + 1} / ${chats.length}</span><div class="clock">${ART.time(c.morning ? 'morning' : 'afternoon')}</div></div>`;
+    chat.innerHTML = `<div class="top"><span class="qnum">${ci + 1} / ${chats.length}</span>${c.morning === null ? '' : `<div class="clock">${ART.time(c.morning ? 'morning' : 'afternoon')}</div>`}</div>`;   // 第 1 级没有早上／下午
     c.lines.forEach((L, i) => {
       const p = L.who === 'A' ? c.A : c.B;
       const row = document.createElement('div');

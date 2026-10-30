@@ -20,9 +20,9 @@ UNIT.matchTitle = { zh: '万圣节配对', py: 'wàn shèng jié pèi duì', en:
 
 /* 每一级冰淇淋的说明（按钮上的小字） */
 UNIT.levels = [
-  { note: '二年级 Grade 2' },
-  { note: '三年级 Grade 3' },
-  { note: '四年级 Grade 4' }
+  { note: '' },
+  { note: '' },
+  { note: '' }
 ];
 
 /* 生词库 */
