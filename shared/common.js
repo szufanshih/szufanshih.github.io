@@ -153,27 +153,44 @@
     for (let k = 0; k < n; k++) g += one(k * 14, k % 2 ? 6 : 0);
     return `<svg viewBox="-2 -2 ${18 + (n - 1) * 14 + 4} 32" aria-hidden="true" style="width:${22 + (n - 1) * 17}px;height:40px">${g}</svg>`;
   };
+  // 几个钱袋（数字的难度）
+  S.moneyBags = function (n) {
+    const one = x => `<g transform="translate(${x} 0)">` +
+      `<path d="M9 11 Q1 17 2 24 Q3 31 14 31 Q25 31 26 24 Q27 17 19 11 Z" fill="#F2C94C" stroke="#2B2B2B" stroke-width="1.6" stroke-linejoin="round"/>` +
+      `<path d="M8 3 L11 7 L14 3.5 L17 7 L20 3 L19 10 L9 10 Z" fill="#F2C94C" stroke="#2B2B2B" stroke-width="1.4" stroke-linejoin="round"/>` +
+      `<path d="M8.5 11 L19.5 11" stroke="#8A5A2B" stroke-width="2.6" stroke-linecap="round"/>` +
+      `<text x="14" y="26.5" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="13" fill="#8A5A2B">$</text></g>`;
+    let g = '';
+    for (let k = 0; k < n; k++) g += one(k * 22);
+    return `<svg viewBox="0 0 ${28 + (n - 1) * 22 + 2} 34" aria-hidden="true" style="width:${30 + (n - 1) * 24}px;height:40px">${g}</svg>`;
+  };
+  // 几只挥手（你好吗的难度）
+  S.bags = n => `<span aria-hidden="true" style="font-size:22px;letter-spacing:-3px;line-height:40px;white-space:nowrap">${'🎒'.repeat(n)}</span>`;
+  S.waves = n => `<span aria-hidden="true" style="font-size:24px;letter-spacing:-4px;line-height:40px;white-space:nowrap">${'👋'.repeat(n)}</span>`;
   // levels: [{ note }, ...]   countOf(level) -> how many items at that level
-  // icon: 'icecream' (default) or 'ghost'
-  S.levelButtons = function (box, levels, current, countOf, onPick, icon) {
+  // icon: 'icecream' (default), 'ghost', 'money', 'wave' or 'bag'
+  // from：这个游戏从第几级开始（例如对话框从第 2 级开始），前面的级不显示
+  S.levelButtons = function (box, levels, current, countOf, onPick, icon, from) {
     box.innerHTML = '';
     const btns = levels.map((L, k) => {
+      if (from && k + 1 < from) return null;
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'level'; b.dataset.level = k + 1;
       const n = countOf ? countOf(k + 1) : null;
-      b.innerHTML = (icon === 'ghost' ? S.ghosts(k + 1) : S.iceCream(k + 1)) + `<span class="lv-text">Level ${k + 1}<small>${S.esc(L.note || '')}${n ? ' · ' + n : ''}</small></span>`;
+      b.innerHTML = (icon === 'ghost' ? S.ghosts(k + 1) : icon === 'money' ? S.moneyBags(k + 1) : icon === 'wave' ? S.waves(k + 1) : icon === 'bag' ? S.bags(k + 1) : S.iceCream(k + 1)) + `<span class="lv-text">Level ${k + 1}<small>${S.esc(L.note || '')}${n ? ' · ' + n : ''}</small></span>`;
       b.addEventListener('click', () => onPick(k + 1));
       box.appendChild(b);
       return b;
-    });
+    }).filter(Boolean);
     return lv => btns.forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.level === lv)));
   };
   // level from the link (#3) or from last time
-  S.startLevel = function (key, max) {
+  S.startLevel = function (key, max, min) {
+    min = min || 1;
     const h = +(location.hash || '').replace(/\D/g, '');
-    if (h >= 1 && h <= max) return h;
-    const saved = +S.get(key, 1);
-    return saved >= 1 && saved <= max ? saved : 1;
+    if (h >= min && h <= max) return h;
+    const saved = +S.get(key, min);
+    return saved >= min && saved <= max ? saved : min;
   };
 
   // ---- 读取单元的图（units/<单元>/art.js），没有也没关系 ----

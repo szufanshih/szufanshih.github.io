@@ -3,12 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../shared/gate.js"></script>
 <title>配对 Matching</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Noto+Sans+SC:wght@500;700&display=swap">
 <link rel="stylesheet" href="../shared/common.css">
 <style>
-/* 配对玩法：中文在左、英文在右，点一个再点它的配对。用法：match.html?unit=family */
+/* 配对玩法：中文在左、英文在右，点一个再点它的配对。用法：match.html?unit=family
+   单元里写 UNIT.matchMode = 'pinyin' 的话，就变成「认字配对」：右边是拼音 + 英文，左边的中文没有拼音 */
 :root { --en: #5B9BD5; --en-deep: #3B78B5; --en-soft: #E3F0FB; --zh: #E9B949; --zh-deep: #C4932A; --zh-soft: #FFF6D6; }
 .board { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .col { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
@@ -36,8 +38,18 @@
 .tile.done.g-mom { border-color: var(--mom); background: var(--mom-done); }
 .tile.done.g-me { border-color: var(--me); background: var(--me-done); }
 .tile.done.g-night { border-color: var(--night); background: var(--night-done); }
+.tile.done.g-sea { border-color: #7FC4D8; background: #D6EEF5; }
+.tile .key { font: 700 26px var(--f-latin); color: var(--sea-ink); }
+.tile .enLine { font-size: 15px; font-weight: 400; color: var(--muted); }
+.pinyinMode .tile[data-side="L"] { flex-direction: column; gap: 0; line-height: 1.15; }
+.pinyinMode .tile { height: auto; min-height: 74px; }
+.pinyinMode .tile.done .ruby { gap: 1px; } .pinyinMode .tile.done .ruby .zh { font-size: 22px; } .pinyinMode .tile.done .ruby .py { font-size: 11px; }
+.pinyinMode .tile.done::after { width: 20px; height: 20px; font-size: 12px; line-height: 20px; right: 4px; top: 4px; transform: none; }
+.board.c3 .tile .key { font-size: 21px; } .board.c3 .tile .enLine { font-size: 13px; }
 .tile.done::after { content: "✓"; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border-radius: 50%; background: #FFFFFF; color: var(--ink); font: 700 18px/30px var(--f-latin); }
 .tile.wrong { animation: shake .35s; border-color: var(--bad); }
+/* 配对成功：先变色，过一下就淡出，留下空格，其他格子不动 */
+.tile.gone { opacity: 0; visibility: hidden; transition: opacity .1s, visibility 0s .1s; }
 @media (max-width: 640px) { .board { gap: 10px; } .tile { font-size: 18px; } .tile .zh { font-size: 26px; } .tile .py { font-size: 14px; } }
 </style>
 </head>
@@ -49,18 +61,19 @@
       <span class="pill" id="timer">0:00</span>
       <button class="ctl" id="timerBtn" type="button"></button>
       <button class="ctl" id="soundBtn" type="button"></button>
+      <button class="ctl" id="enBtn" type="button" hidden></button>
       <button class="ctl" id="resetBtn" type="button">Mix up again</button>
     </div>
   </div>
   <div class="levels" id="levels" aria-label="Level"></div>
-  <p class="help">Tap a Chinese word, then its English match.</p>
+  <p class="help" id="help">Tap a Chinese word, then its English match.</p>
   <div class="win" id="win" hidden><span><span class="ruby" id="winRuby"></span> Great job! <span id="winTime"></span></span><button class="ctl" id="againBtn" type="button">Play again</button></div>
 
   <div class="playArea waiting" id="playArea">
     <div class="playInner">
       <div class="board" id="board">
         <div class="col zh"><h2>中文</h2><div class="grid" id="right"></div></div>
-        <div class="col en"><h2>English</h2><div class="grid" id="left"></div></div>
+        <div class="col en"><h2 id="leftHead">English</h2><div class="grid" id="left"></div></div>
       </div>
     </div>
   </div>
@@ -81,6 +94,15 @@ Shih.loadUnit().then(UNIT => {
   const scoreEl = document.getElementById('score'), timerEl = document.getElementById('timer');
   const winEl = document.getElementById('win'), winTime = document.getElementById('winTime');
   const timer = Shih.timer(timerEl);
+  const PINYIN = UNIT.matchMode === 'pinyin';
+  let showEn = () => true;
+  if (PINYIN) {
+    boardEl.classList.add('pinyinMode');
+    document.getElementById('leftHead').textContent = 'Pinyin';
+    document.getElementById('help').textContent = 'Tap the Chinese, then its pinyin.';
+    const enBtn = document.getElementById('enBtn'); enBtn.hidden = false;
+    showEn = Shih.toggle(enBtn, 'matchEnglish', 'English on', 'English off', true, on => boardEl.querySelectorAll('.enLine').forEach(e => { e.hidden = !on; }));
+  }
   const timerOn = Shih.toggle(document.getElementById('timerBtn'), 'timer', '⏱ Timer on', '⏱ Timer off', true, on => { timerEl.hidden = !on; });
   Shih.soundButton(document.getElementById('soundBtn'));
 
@@ -89,7 +111,7 @@ Shih.loadUnit().then(UNIT => {
 
   const paintLevels = Shih.levelButtons(document.getElementById('levels'), LEVELS, level,
     lv => WORDS.filter(w => (w.level || 1) <= lv).length,
-    lv => { level = lv; Shih.set('matchLevel', lv); setup(); });
+    lv => { level = lv; Shih.set('matchLevel', lv); setup(); }, UNIT.levelIcon);
 
   const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   // English layout: "older/younger" on line 1 for cousins, "(...)" always on its own line
@@ -104,8 +126,13 @@ Shih.loadUnit().then(UNIT => {
     b.type = 'button';
     b.className = 'tile g-' + (w.side || 'me');
     b.dataset.side = side; b.dataset.i = i;
-    if (side === 'L') b.innerHTML = enHTML(w.en); else b.innerHTML = `<span class="ruby">${Shih.ruby(w.zh, w.py)}</span>`;
-    b.addEventListener('click', () => { if (side === 'R') Shih.speak(w.zh); pick(b); });
+    if (PINYIN) {
+      // 认字配对：有 key 的只配会变的那个字（拼音 w.key ↔ 中文 w.keyZh），中文那边不放拼音
+      if (side === 'L') b.innerHTML = `<span class="key">${Shih.esc(w.key || w.py)}</span><span class="enLine"${showEn() ? '' : ' hidden'}>${Shih.esc(w.keyEn || w.en)}</span>`;
+      else b.innerHTML = `<span class="zh" style="font-family:var(--f-zh)">${Shih.esc(w.keyZh || w.zh)}</span>`;
+    } else if (side === 'L') b.innerHTML = enHTML(w.en); else b.innerHTML = `<span class="ruby">${Shih.ruby(w.zh, w.py)}</span>`;
+    // 认字配对时，配对成功才念（不然听声音就能配）
+    b.addEventListener('click', () => { if (side === 'R' && !PINYIN) Shih.speak(w.zh); pick(b); });
     return b;
   }
 
@@ -113,6 +140,8 @@ Shih.loadUnit().then(UNIT => {
 
   function setup() {
     PAIRS = WORDS.filter(w => (w.level || 1) <= level);
+    // 单元可以设 UNIT.matchMax：字太多时，每次随机挑这么多组来配
+    if (UNIT.matchMax && PAIRS.length > UNIT.matchMax) PAIRS = shuffle(PAIRS).slice(0, UNIT.matchMax);
     const cols = PAIRS.length <= 6 ? 1 : PAIRS.length <= 12 ? 2 : 3;
     boardEl.classList.remove('c1', 'c2', 'c3'); boardEl.classList.add('c' + cols);
     boardEl.style.setProperty('--cols', cols);
@@ -137,6 +166,8 @@ Shih.loadUnit().then(UNIT => {
       picked = { L: null, R: null };
       if (a.dataset.i === c.dataset.i) {
         [a, c].forEach(t => { t.classList.remove('picked'); t.classList.add('done'); t.disabled = true; });
+        setTimeout(() => [a, c].forEach(t => t.classList.add('gone')), 200);
+        if (PINYIN) { const w = PAIRS[+c.dataset.i]; Shih.speak(w.keyZh || w.zh); }   // 配对成功就念，不另外显示拼音
         matched++; update();
         if (matched === PAIRS.length) {
           const ms = timer.stop();

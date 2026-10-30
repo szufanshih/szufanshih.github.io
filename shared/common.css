@@ -126,3 +126,16 @@ button:focus-visible { outline: 3px solid var(--pick); outline-offset: 2px; }
 .dropSlot.hover { border-style: solid; background: var(--card); }
 .dropSlot.filled { border-style: solid; border-color: var(--me); background: var(--me-done); }
 .dropSlot .py { font-size: 15px; } .dropSlot .zh { font-size: 28px; }
+
+/* 中国算盘（数字的游戏） */
+svg.abacus { display: block; width: 100%; height: auto; touch-action: manipulation; }
+svg.abacus .bd { transition: transform .14s ease-out; }
+svg.abacus.live .bd { cursor: pointer; }
+svg.abacus.live .bd:hover { fill: #D9694E; }
+svg.abacus .ab-py { font: 15px var(--f-latin); fill: var(--muted); }
+svg.abacus .ab-zh { font: 700 26px var(--f-zh); fill: var(--ink); }
+svg.abacus .ab-en { font: 700 14px var(--f-latin); fill: var(--muted); }
+/* 加减法的符号：有颜色、有圆圈，不会看成「十」 */
+.op { display: inline-flex; align-items: center; justify-content: center; width: 1.25em; height: 1.25em; border-radius: 50%;
+  font: 700 1em/1 var(--f-latin); color: #fff; flex: none; }
+.op.plus { background: #2F7A4D; } .op.minus { background: #D9572B; }

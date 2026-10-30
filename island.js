@@ -25,11 +25,26 @@ window.ISLANDS = {
           { zh: '家人配对', py: 'jiā rén pèi duì', en: 'Family Matching', note: 'Match Chinese and English, 4 levels', href: 'games/match.html?unit=family' },
           { zh: '家庭大富翁', py: 'jiā tíng dà fù wēng', en: 'Family Board Game', note: 'Roll the dice and ask 你有……吗？', href: 'games/board.html?unit=family' }
         ] },
-      { zh: '学校', py: 'xué xiào', en: 'School', x: 265, y: 296, color: 'mom', games: [] },
+      { id: 'school', zh: '学校', py: 'xué xiào', en: 'School', x: 265, y: 296, color: 'mom',
+        games: [
+          { zh: '认字配对', py: 'rèn zì pèi duì', en: 'Pinyin Match', note: 'School words, 3 levels', href: 'games/match.html?unit=school' },
+          { zh: '对话框', py: 'duì huà kuàng', en: 'Chat Bubbles', note: 'Fill in the chat, Grade 3–4', href: 'games/chat.html?unit=school' },
+          { zh: '自我介绍', py: 'zì wǒ jiè shào', en: 'About Me', note: 'Grade 4 project · Read the card, build the sentences', href: 'games/intro.html?unit=school' }
+        ] },
       { zh: '卫生间', py: 'wèi shēng jiān', en: 'Restroom', x: 470, y: 140, labelOnly: true },
       { zh: '饮水机', py: 'yǐn shuǐ jī', en: 'Water Fountain', x: 414, y: 384, labelOnly: true },
-      { zh: '你好吗', py: 'nǐ hǎo ma', en: 'How are you?', x: 193, y: 548, color: 'sea', games: [] },
-      { zh: '数字', py: 'shù zì', en: 'Numbers', x: 872, y: 520, color: 'sun', games: [] }
+      { id: 'hello', zh: '你好吗', py: 'nǐ hǎo ma', en: 'How are you?', x: 193, y: 548, color: 'sea',
+        games: [
+          { zh: '认字配对', py: 'rèn zì pèi duì', en: 'Pinyin Match', note: 'Greetings and feelings, 3 levels', href: 'games/match.html?unit=hello' },
+          { zh: '你好吗？', py: 'nǐ hǎo ma?', en: 'How Are You?', note: 'Look at the kid and answer, 3 levels', href: 'games/feel.html?unit=hello' }
+        ] },
+      { id: 'numbers', zh: '数字', py: 'shù zì', en: 'Numbers', x: 872, y: 520, color: 'sun',
+        games: [
+          { zh: '数字挑战', py: 'shù zì tiǎo zhàn', en: 'Number Challenge', note: '3 levels · 8 questions', href: 'games/numbers.html?unit=numbers' },
+          { zh: '看算盘', py: 'kàn suàn pán', en: 'Read the Abacus', note: 'What number is on the abacus?', href: 'games/abacus-read.html?unit=numbers' },
+          { zh: '拨一拨', py: 'bō yi bō', en: 'Make the Number', note: 'Move the beads to make the number', href: 'games/abacus-set.html?unit=numbers' },
+          { zh: '自由拨', py: 'zì yóu bō', en: 'Free Play', note: 'An abacus to play with', href: 'games/abacus-free.html?unit=numbers' }
+        ] }
     ]
   },
   holiday: {
